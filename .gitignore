@@ -1,0 +1,38 @@
+# .NET Build and Output Directories
+bin/
+obj/
+publish/
+out/
+.vs/
+.vscode/
+.idea/
+
+# Node / React Frontend Dependencies and Builds
+node_modules/
+client/node_modules/
+client/dist/
+dist/
+.output/
+
+# Local SQLite Database Files
+*.db
+*.db-shm
+*.db-wal
+devkeep.db
+
+# Uploaded User Files (keep folder structure)
+DevKeep.Api/wwwroot/certificates/*
+!DevKeep.Api/wwwroot/certificates/.gitkeep
+
+# Sensitive local settings and environment files
+.env
+.env.local
+.env.development.local
+appsettings.Local.json
+appsettings.Development.json
+*.user
+*.suo
+
+# OS Generated Files
+.DS_Store
+Thumbs.db
