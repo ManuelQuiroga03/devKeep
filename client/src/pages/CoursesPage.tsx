@@ -118,7 +118,6 @@ export const CoursesPage: React.FC = () => {
       setUploadingCert(true);
       let courseId = editingCourse?.id;
 
-      // Sanitizar campos opcionales: si están vacíos o contienen solo espacios, enviar undefined
       const courseUrlClean = formData.courseUrl?.trim() ? formData.courseUrl.trim() : undefined;
       const instructorClean = formData.instructor?.trim() ? formData.instructor.trim() : undefined;
       const certUrlClean = formData.certificateUrl?.trim() ? formData.certificateUrl.trim() : undefined;
@@ -271,8 +270,8 @@ export const CoursesPage: React.FC = () => {
                     <div className="flex items-center gap-1">
                       <button
                         onClick={(e) => handleOpenEditModal(e, course)}
-                        className="p-1.5 rounded hover:bg-dark-surface text-dark-textMuted hover:text-cyanAccent transition-colors"
-                        title="Editar curso"
+                        className="p-1.5 rounded-lg hover:bg-cyanAccent/10 text-dark-textMuted hover:text-cyanAccent hover:border hover:border-cyanAccent/30 transition-all btn-action-icon"
+                        title="Editar información del curso"
                       >
                         <Edit3 className="w-4 h-4" />
                       </button>
@@ -282,16 +281,16 @@ export const CoursesPage: React.FC = () => {
                           target="_blank"
                           rel="noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          className="p-1.5 rounded hover:bg-dark-surface text-dark-textMuted hover:text-cyanAccent transition-colors"
-                          title="Abrir enlace externo"
+                          className="p-1.5 rounded-lg hover:bg-cyanAccent/10 text-dark-textMuted hover:text-cyanAccent hover:border hover:border-cyanAccent/30 transition-all btn-action-icon"
+                          title="Abrir enlace del curso en una nueva pestaña"
                         >
                           <ExternalLink className="w-4 h-4" />
                         </a>
                       )}
                       <button
                         onClick={(e) => handleDeleteCourse(e, course.id, course.title)}
-                        className="p-1.5 rounded hover:bg-rose-500/10 text-dark-textMuted hover:text-rose-400 transition-colors"
-                        title="Eliminar curso"
+                        className="p-1.5 rounded-lg hover:bg-rose-500/10 text-dark-textMuted hover:text-rose-400 hover:border hover:border-rose-500/30 transition-all btn-action-icon"
+                        title="Eliminar este curso"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -320,7 +319,8 @@ export const CoursesPage: React.FC = () => {
                         target="_blank"
                         rel="noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="flex items-center gap-1 text-xs font-mono px-2.5 py-1 rounded bg-amber-400/10 text-amber-400 border border-amber-400/30 hover:bg-amber-400/20 transition-colors font-medium"
+                        className="flex items-center gap-1 text-xs font-mono px-2.5 py-1 rounded bg-amber-400/10 text-amber-400 border border-amber-400/30 hover:bg-amber-400/20 transition-colors font-medium btn-action-icon"
+                        title="Ver o descargar certificado de finalización"
                       >
                         <Award className="w-3.5 h-3.5" />
                         <span>Ver Certificado</span>
@@ -379,13 +379,13 @@ export const CoursesPage: React.FC = () => {
               <select
                 value={formData.platform}
                 onChange={(e) => setFormData({ ...formData, platform: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg bg-dark-surface border border-dark-border text-dark-textMain focus:border-cyanAccent outline-none text-sm"
+                className="w-full px-3 py-2 rounded-lg bg-dark-surface border border-dark-border text-dark-textMain focus:border-cyanAccent outline-none text-sm cursor-pointer"
               >
-                <option value="Udemy">Udemy</option>
-                <option value="YouTube">YouTube</option>
-                <option value="Platzi">Platzi</option>
-                <option value="Doc">Documentación</option>
-                <option value="Libro">Libro / Ebook</option>
+                <option value="Udemy" className="bg-[#0f172a] text-[#f8fafc]">Udemy</option>
+                <option value="YouTube" className="bg-[#0f172a] text-[#f8fafc]">YouTube</option>
+                <option value="Platzi" className="bg-[#0f172a] text-[#f8fafc]">Platzi</option>
+                <option value="Doc" className="bg-[#0f172a] text-[#f8fafc]">Documentación</option>
+                <option value="Libro" className="bg-[#0f172a] text-[#f8fafc]">Libro / Ebook</option>
               </select>
             </div>
 
@@ -396,11 +396,11 @@ export const CoursesPage: React.FC = () => {
               <select
                 value={formData.status}
                 onChange={(e) => handleStatusChange(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg bg-dark-surface border border-dark-border text-dark-textMain focus:border-cyanAccent outline-none text-sm font-medium"
+                className="w-full px-3 py-2 rounded-lg bg-dark-surface border border-dark-border text-dark-textMain focus:border-cyanAccent outline-none text-sm font-medium cursor-pointer"
               >
-                <option value="Not Started">Por empezar</option>
-                <option value="In Progress">En progreso</option>
-                <option value="Completed">Completado</option>
+                <option value="Not Started" className="bg-[#0f172a] text-[#f8fafc]">Por empezar</option>
+                <option value="In Progress" className="bg-[#0f172a] text-[#f8fafc]">En progreso</option>
+                <option value="Completed" className="bg-[#0f172a] text-[#f8fafc]">Completado</option>
               </select>
             </div>
           </div>

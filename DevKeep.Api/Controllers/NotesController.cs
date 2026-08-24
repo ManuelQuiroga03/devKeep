@@ -58,12 +58,12 @@ public class NotesController : ControllerBase
         var note = new CourseNote
         {
             CourseId = dto.CourseId,
-            SectionTitle = dto.SectionTitle,
-            LessonTitle = dto.LessonTitle,
-            VideoTimestamp = dto.VideoTimestamp,
-            DirectUrl = dto.DirectUrl,
+            SectionTitle = string.IsNullOrWhiteSpace(dto.SectionTitle) ? null : dto.SectionTitle.Trim(),
+            LessonTitle = dto.LessonTitle.Trim(),
+            VideoTimestamp = string.IsNullOrWhiteSpace(dto.VideoTimestamp) ? null : dto.VideoTimestamp.Trim(),
+            DirectUrl = string.IsNullOrWhiteSpace(dto.DirectUrl) ? null : dto.DirectUrl.Trim(),
             MarkdownContent = dto.MarkdownContent,
-            Tags = dto.Tags,
+            Tags = string.IsNullOrWhiteSpace(dto.Tags) ? "" : dto.Tags.Trim(),
             CreatedAt = DateTime.UtcNow
         };
 
@@ -79,12 +79,12 @@ public class NotesController : ControllerBase
         var note = await _context.CourseNotes.FindAsync(id);
         if (note == null) return NotFound(new { message = $"Nota con ID {id} no encontrada." });
 
-        note.SectionTitle = dto.SectionTitle;
-        note.LessonTitle = dto.LessonTitle;
-        note.VideoTimestamp = dto.VideoTimestamp;
-        note.DirectUrl = dto.DirectUrl;
+        note.SectionTitle = string.IsNullOrWhiteSpace(dto.SectionTitle) ? null : dto.SectionTitle.Trim();
+        note.LessonTitle = dto.LessonTitle.Trim();
+        note.VideoTimestamp = string.IsNullOrWhiteSpace(dto.VideoTimestamp) ? null : dto.VideoTimestamp.Trim();
+        note.DirectUrl = string.IsNullOrWhiteSpace(dto.DirectUrl) ? null : dto.DirectUrl.Trim();
         note.MarkdownContent = dto.MarkdownContent;
-        note.Tags = dto.Tags;
+        note.Tags = string.IsNullOrWhiteSpace(dto.Tags) ? "" : dto.Tags.Trim();
         note.UpdatedAt = DateTime.UtcNow;
 
         await _context.SaveChangesAsync();

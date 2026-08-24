@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { 
-  Plus, Download, ArrowLeft, CheckCircle2, 
-  Clock, ExternalLink, Tag, FileText, Trash2, Award 
+import {
+  Plus, Download, ArrowLeft, CheckCircle2,
+  Clock, ExternalLink, Tag, FileText, Trash2, Award
 } from 'lucide-react';
 import { courseService } from '../services/courseService';
 import { noteService } from '../services/noteService';
@@ -60,10 +60,17 @@ export const CourseDetailPage: React.FC = () => {
     }
 
     try {
-      const newNote = await noteService.createNote({
-        ...noteForm,
+      const payload: CreateNoteDto = {
         courseId: id!,
-      });
+        lessonTitle: noteForm.lessonTitle.trim(),
+        markdownContent: noteForm.markdownContent,
+        sectionTitle: noteForm.sectionTitle?.trim() || undefined,
+        videoTimestamp: noteForm.videoTimestamp?.trim() || undefined,
+        directUrl: noteForm.directUrl?.trim() || undefined,
+        tags: noteForm.tags?.trim() || undefined,
+      };
+
+      const newNote = await noteService.createNote(payload);
       toast.success('Nota registrada en el curso', {
         icon: <CheckCircle2 className="w-4 h-4 text-emerald-400" />,
       });
@@ -80,7 +87,7 @@ export const CourseDetailPage: React.FC = () => {
       await loadCourseData();
       setSelectedNote(newNote);
     } catch (err: any) {
-      const msg = err.response?.data?.detail || 'Error al guardar la nota';
+      const msg = err.response?.data?.message || err.response?.data?.detail || 'Error al guardar la nota';
       toast.error(msg);
     }
   };
@@ -104,7 +111,7 @@ export const CourseDetailPage: React.FC = () => {
         status: newStatus,
         certificateUrl: course.certificateUrl,
       });
-      
+
       setCourse({
         ...course,
         completedLessons: newCompleted,
@@ -226,9 +233,8 @@ export const CourseDetailPage: React.FC = () => {
             </div>
             <div className="w-full bg-dark-bg h-2 rounded-full overflow-hidden">
               <div
-                className={`h-full rounded-full transition-all duration-300 ${
-                  course.status === 'Completed' ? 'bg-emerald-400' : 'bg-cyanAccent'
-                }`}
+                className={`h-full rounded-full transition-all duration-300 ${course.status === 'Completed' ? 'bg-emerald-400' : 'bg-cyanAccent'
+                  }`}
                 style={{ width: `${course.progressPercentage}%` }}
               ></div>
             </div>
@@ -266,11 +272,10 @@ export const CourseDetailPage: React.FC = () => {
                   <div
                     key={note.id}
                     onClick={() => setSelectedNote(note)}
-                    className={`p-3 rounded-lg border text-left cursor-pointer transition-all ${
-                      selectedNote?.id === note.id
+                    className={`p-3 rounded-lg border text-left cursor-pointer transition-all ${selectedNote?.id === note.id
                         ? 'bg-cyanAccent/10 border-cyanAccent/40 text-dark-textMain'
                         : 'bg-dark-surface border-dark-border hover:border-dark-borderHover text-dark-textMuted hover:text-dark-textMain'
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-sm font-medium line-clamp-1">{note.lessonTitle}</span>

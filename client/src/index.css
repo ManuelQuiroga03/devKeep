@@ -11,6 +11,27 @@
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
   }
+
+  /* Fix for HTML Select Dropdown Menus in Dark Mode */
+  select {
+    color-scheme: dark;
+    background-color: #0f172a;
+    color: #f8fafc;
+  }
+
+  select option {
+    background-color: #0f172a !important;
+    color: #f8fafc !important;
+    padding: 8px 12px;
+  }
+
+  select option:hover,
+  select option:focus,
+  select option:active,
+  select option:checked {
+    background-color: #1e293b !important;
+    color: #06b6d4 !important;
+  }
 }
 
 /* Custom Scrollbar */
@@ -48,4 +69,17 @@
 .glass-card:hover {
   border-color: #334155;
   box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.4);
+}
+
+/* Action Button Micro-Interactions */
+.btn-action-icon {
+  transition: all 0.15s ease-in-out;
+}
+
+.btn-action-icon:hover {
+  transform: translateY(-1px);
+}
+
+.btn-action-icon:active {
+  transform: translateY(0);
 }
