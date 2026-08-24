@@ -118,23 +118,40 @@ export const CoursesPage: React.FC = () => {
       setUploadingCert(true);
       let courseId = editingCourse?.id;
 
+      // Sanitizar campos opcionales: si están vacíos o contienen solo espacios, enviar undefined
+      const courseUrlClean = formData.courseUrl?.trim() ? formData.courseUrl.trim() : undefined;
+      const instructorClean = formData.instructor?.trim() ? formData.instructor.trim() : undefined;
+      const certUrlClean = formData.certificateUrl?.trim() ? formData.certificateUrl.trim() : undefined;
+
       if (editingCourse) {
         const updateDto: UpdateCourseDto = {
-          title: formData.title,
+          title: formData.title.trim(),
           platform: formData.platform,
-          instructor: formData.instructor,
-          courseUrl: formData.courseUrl,
+          instructor: instructorClean,
+          courseUrl: courseUrlClean,
           totalChapters: formData.totalChapters,
           currentChapter: formData.currentChapter,
           totalLessons: formData.totalLessons,
           completedLessons: formData.status === 'Completed' ? formData.totalLessons : (formData.completedLessons || 0),
           status: formData.status,
-          certificateUrl: formData.certificateUrl,
+          certificateUrl: certUrlClean,
         };
         await courseService.updateCourse(editingCourse.id, updateDto);
         toast.success('Curso actualizado correctamente');
       } else {
-        const newCourse = await courseService.createCourse(formData);
+        const createDto: CreateCourseDto = {
+          title: formData.title.trim(),
+          platform: formData.platform,
+          instructor: instructorClean,
+          courseUrl: courseUrlClean,
+          totalChapters: formData.totalChapters,
+          currentChapter: formData.currentChapter,
+          totalLessons: formData.totalLessons,
+          completedLessons: formData.status === 'Completed' ? formData.totalLessons : (formData.completedLessons || 0),
+          status: formData.status,
+          certificateUrl: certUrlClean,
+        };
+        const newCourse = await courseService.createCourse(createDto);
         courseId = newCourse.id;
         toast.success('Curso registrado correctamente', {
           icon: <CheckCircle2 className="w-4 h-4 text-emerald-400" />,

@@ -49,10 +49,10 @@ public class CoursesController : ControllerBase
     {
         var course = new Course
         {
-            Title = dto.Title,
-            Platform = dto.Platform,
-            Instructor = dto.Instructor,
-            CourseUrl = dto.CourseUrl,
+            Title = dto.Title.Trim(),
+            Platform = dto.Platform.Trim(),
+            Instructor = string.IsNullOrWhiteSpace(dto.Instructor) ? null : dto.Instructor.Trim(),
+            CourseUrl = string.IsNullOrWhiteSpace(dto.CourseUrl) ? null : dto.CourseUrl.Trim(),
             TotalChapters = dto.TotalChapters,
             CurrentChapter = dto.CurrentChapter,
             TotalLessons = dto.TotalLessons,
@@ -60,7 +60,7 @@ public class CoursesController : ControllerBase
                 ? dto.TotalLessons 
                 : dto.CompletedLessons,
             Status = dto.Status,
-            CertificateUrl = dto.CertificateUrl,
+            CertificateUrl = string.IsNullOrWhiteSpace(dto.CertificateUrl) ? null : dto.CertificateUrl.Trim(),
             CreatedAt = DateTime.UtcNow
         };
 
@@ -81,10 +81,10 @@ public class CoursesController : ControllerBase
         var course = await _context.Courses.FindAsync(id);
         if (course == null) return NotFound(new { message = $"Curso con ID {id} no encontrado." });
 
-        course.Title = dto.Title;
-        course.Platform = dto.Platform;
-        course.Instructor = dto.Instructor;
-        course.CourseUrl = dto.CourseUrl;
+        course.Title = dto.Title.Trim();
+        course.Platform = dto.Platform.Trim();
+        course.Instructor = string.IsNullOrWhiteSpace(dto.Instructor) ? null : dto.Instructor.Trim();
+        course.CourseUrl = string.IsNullOrWhiteSpace(dto.CourseUrl) ? null : dto.CourseUrl.Trim();
         course.TotalChapters = dto.TotalChapters;
         course.CurrentChapter = dto.CurrentChapter;
         course.TotalLessons = dto.TotalLessons;
@@ -92,7 +92,7 @@ public class CoursesController : ControllerBase
             ? dto.TotalLessons 
             : dto.CompletedLessons;
         course.Status = dto.Status;
-        course.CertificateUrl = dto.CertificateUrl ?? course.CertificateUrl;
+        course.CertificateUrl = string.IsNullOrWhiteSpace(dto.CertificateUrl) ? course.CertificateUrl : dto.CertificateUrl.Trim();
 
         await _context.SaveChangesAsync();
         return NoContent();
