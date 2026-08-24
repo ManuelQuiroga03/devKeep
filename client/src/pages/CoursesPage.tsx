@@ -367,11 +367,11 @@ export const CoursesPage: React.FC = () => {
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
               placeholder="Ej: ASP.NET Core 8 Web API & Docker Masterclass"
-              className="w-full px-3 py-2 rounded-lg bg-dark-surface border border-dark-border text-dark-textMain focus:border-cyanAccent outline-none text-sm"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-dark-surface border border-dark-border text-dark-textMain focus:ring-2 focus:ring-cyanAccent/40 focus:border-cyanAccent outline-none text-sm transition-all shadow-inner"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-dark-textMuted uppercase tracking-wider mb-1">
                 Plataforma *
@@ -379,7 +379,7 @@ export const CoursesPage: React.FC = () => {
               <select
                 value={formData.platform}
                 onChange={(e) => setFormData({ ...formData, platform: e.target.value })}
-                className="w-full px-3 py-2 rounded-lg bg-dark-surface border border-dark-border text-dark-textMain focus:border-cyanAccent outline-none text-sm cursor-pointer"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-dark-surface border border-dark-border text-dark-textMain focus:ring-2 focus:ring-cyanAccent/40 focus:border-cyanAccent outline-none text-sm cursor-pointer transition-all"
               >
                 <option value="Udemy" className="bg-[#0f172a] text-[#f8fafc]">Udemy</option>
                 <option value="YouTube" className="bg-[#0f172a] text-[#f8fafc]">YouTube</option>
@@ -396,7 +396,7 @@ export const CoursesPage: React.FC = () => {
               <select
                 value={formData.status}
                 onChange={(e) => handleStatusChange(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg bg-dark-surface border border-dark-border text-dark-textMain focus:border-cyanAccent outline-none text-sm font-medium cursor-pointer"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-dark-surface border border-dark-border text-dark-textMain focus:ring-2 focus:ring-cyanAccent/40 focus:border-cyanAccent outline-none text-sm font-medium cursor-pointer transition-all"
               >
                 <option value="Not Started" className="bg-[#0f172a] text-[#f8fafc]">Por empezar</option>
                 <option value="In Progress" className="bg-[#0f172a] text-[#f8fafc]">En progreso</option>
@@ -407,13 +407,13 @@ export const CoursesPage: React.FC = () => {
 
           {/* Conditional Inputs: In Progress */}
           {formData.status === 'In Progress' && (
-            <div className="p-3.5 rounded-lg bg-dark-surface border border-dark-border space-y-3">
+            <div className="p-4 rounded-xl bg-dark-surface/70 border border-dark-border space-y-3 shadow-inner">
               <div className="text-xs font-semibold text-cyanAccent uppercase tracking-wider flex items-center gap-1.5">
                 <Clock className="w-4 h-4" />
                 <span>Estado de Avance Actual</span>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[11px] text-dark-textMuted mb-1">Capítulo Actual</label>
                   <input
@@ -422,7 +422,7 @@ export const CoursesPage: React.FC = () => {
                     value={formData.currentChapter}
                     onChange={(e) => setFormData({ ...formData, currentChapter: parseInt(e.target.value) || 0 })}
                     placeholder="Ej. 4"
-                    className="w-full px-2.5 py-1.5 rounded bg-dark-bg border border-dark-border text-dark-textMain text-xs font-mono"
+                    className="w-full px-3 py-2 rounded-lg bg-dark-bg border border-dark-border text-dark-textMain focus:border-cyanAccent focus:ring-1 focus:ring-cyanAccent/40 text-xs font-mono outline-none transition-all"
                   />
                 </div>
                 <div>
@@ -433,12 +433,12 @@ export const CoursesPage: React.FC = () => {
                     value={formData.totalChapters}
                     onChange={(e) => setFormData({ ...formData, totalChapters: parseInt(e.target.value) || 0 })}
                     placeholder="Ej. 12"
-                    className="w-full px-2.5 py-1.5 rounded bg-dark-bg border border-dark-border text-dark-textMain text-xs font-mono"
+                    className="w-full px-3 py-2 rounded-lg bg-dark-bg border border-dark-border text-dark-textMain focus:border-cyanAccent focus:ring-1 focus:ring-cyanAccent/40 text-xs font-mono outline-none transition-all"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[11px] text-dark-textMuted mb-1">Lecciones Completadas</label>
                   <input
@@ -447,7 +447,7 @@ export const CoursesPage: React.FC = () => {
                     value={formData.completedLessons}
                     onChange={(e) => setFormData({ ...formData, completedLessons: parseInt(e.target.value) || 0 })}
                     placeholder="Ej. 24"
-                    className="w-full px-2.5 py-1.5 rounded bg-dark-bg border border-dark-border text-dark-textMain text-xs font-mono"
+                    className="w-full px-3 py-2 rounded-lg bg-dark-bg border border-dark-border text-dark-textMain focus:border-cyanAccent focus:ring-1 focus:ring-cyanAccent/40 text-xs font-mono outline-none transition-all"
                   />
                 </div>
                 <div>
@@ -458,7 +458,7 @@ export const CoursesPage: React.FC = () => {
                     value={formData.totalLessons}
                     onChange={(e) => setFormData({ ...formData, totalLessons: parseInt(e.target.value) || 0 })}
                     placeholder="Ej. 80"
-                    className="w-full px-2.5 py-1.5 rounded bg-dark-bg border border-dark-border text-dark-textMain text-xs font-mono"
+                    className="w-full px-3 py-2 rounded-lg bg-dark-bg border border-dark-border text-dark-textMain focus:border-cyanAccent focus:ring-1 focus:ring-cyanAccent/40 text-xs font-mono outline-none transition-all"
                   />
                 </div>
               </div>
@@ -467,7 +467,7 @@ export const CoursesPage: React.FC = () => {
 
           {/* Conditional Inputs: Completed */}
           {formData.status === 'Completed' && (
-            <div className="p-3.5 rounded-lg bg-emerald-500/10 border border-emerald-500/30 space-y-3">
+            <div className="p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/30 space-y-3 shadow-inner">
               <div className="flex items-center gap-2 text-xs font-semibold text-emerald-400 uppercase tracking-wider">
                 <Award className="w-4 h-4" />
                 <span>Curso Completado (100% Progreso)</span>
@@ -479,7 +479,7 @@ export const CoursesPage: React.FC = () => {
                   Adjuntar Certificado de Finalización (.pdf, .png, .jpg, .jpeg, .webp)
                 </label>
 
-                <div className="border-2 border-dashed border-dark-border rounded-lg p-4 text-center bg-dark-bg hover:border-emerald-500/50 transition-colors">
+                <div className="border-2 border-dashed border-dark-border rounded-xl p-4 text-center bg-dark-bg hover:border-emerald-500/50 transition-colors">
                   <input
                     type="file"
                     id="cert-file"
@@ -506,7 +506,7 @@ export const CoursesPage: React.FC = () => {
                   value={formData.certificateUrl}
                   onChange={(e) => setFormData({ ...formData, certificateUrl: e.target.value })}
                   placeholder="https://..."
-                  className="w-full px-2.5 py-1.5 rounded bg-dark-bg border border-dark-border text-dark-textMain text-xs font-mono"
+                  className="w-full px-3 py-2 rounded-lg bg-dark-bg border border-dark-border text-dark-textMain focus:border-emerald-500 text-xs font-mono outline-none transition-all"
                 />
               </div>
             </div>
@@ -521,7 +521,7 @@ export const CoursesPage: React.FC = () => {
               value={formData.instructor}
               onChange={(e) => setFormData({ ...formData, instructor: e.target.value })}
               placeholder="Ej: Fernando Herrera, Tim Corey"
-              className="w-full px-3 py-2 rounded-lg bg-dark-surface border border-dark-border text-dark-textMain focus:border-cyanAccent outline-none text-sm"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-dark-surface border border-dark-border text-dark-textMain focus:ring-2 focus:ring-cyanAccent/40 focus:border-cyanAccent outline-none text-sm transition-all"
             />
           </div>
 
@@ -534,22 +534,22 @@ export const CoursesPage: React.FC = () => {
               value={formData.courseUrl}
               onChange={(e) => setFormData({ ...formData, courseUrl: e.target.value })}
               placeholder="https://www.udemy.com/course/..."
-              className="w-full px-3 py-2 rounded-lg bg-dark-surface border border-dark-border text-dark-textMain focus:border-cyanAccent outline-none text-sm"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-dark-surface border border-dark-border text-dark-textMain focus:ring-2 focus:ring-cyanAccent/40 focus:border-cyanAccent outline-none text-sm transition-all"
             />
           </div>
 
-          <div className="pt-4 border-t border-dark-border flex justify-end gap-3">
+          <div className="pt-4 border-t border-dark-border flex flex-col-reverse sm:flex-row justify-end gap-3">
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 rounded-lg bg-dark-surface text-dark-textMuted hover:text-dark-textMain font-medium text-sm transition-colors"
+              className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-dark-surface border border-dark-border text-dark-textMuted hover:text-dark-textMain hover:bg-dark-border/40 hover:border-dark-borderHover font-medium text-sm transition-all active:scale-95 shadow-sm text-center"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={uploadingCert}
-              className="px-4 py-2 rounded-lg bg-cyanAccent text-dark-bg font-semibold text-sm hover:bg-cyanAccent-hover transition-colors disabled:opacity-50"
+              className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-cyanAccent text-dark-bg font-semibold text-sm hover:bg-cyanAccent-hover hover:shadow-lg hover:shadow-cyanAccent/20 transition-all active:scale-95 disabled:opacity-50 text-center shadow-md flex items-center justify-center gap-2"
             >
               {uploadingCert ? 'Guardando...' : 'Guardar Curso'}
             </button>

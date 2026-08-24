@@ -472,17 +472,17 @@ export const CourseDetailPage: React.FC = () => {
             </div>
           </div>
 
-          <div className="pt-4 border-t border-dark-border flex justify-end gap-3">
+          <div className="pt-4 border-t border-dark-border flex flex-col-reverse sm:flex-row justify-end gap-3">
             <button
               type="button"
               onClick={() => setIsNoteModalOpen(false)}
-              className="px-4 py-2 rounded-lg bg-dark-surface text-dark-textMuted hover:text-dark-textMain font-medium text-sm transition-colors"
+              className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-dark-surface border border-dark-border text-dark-textMuted hover:text-dark-textMain hover:bg-dark-border/40 hover:border-dark-borderHover font-medium text-sm transition-all active:scale-95 shadow-sm text-center"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="px-4 py-2 rounded-lg bg-cyanAccent text-dark-bg font-semibold text-sm hover:bg-cyanAccent-hover transition-colors"
+              className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-cyanAccent text-dark-bg font-semibold text-sm hover:bg-cyanAccent-hover hover:shadow-lg hover:shadow-cyanAccent/20 transition-all active:scale-95 text-center shadow-md flex items-center justify-center gap-2"
             >
               Guardar Nota
             </button>
