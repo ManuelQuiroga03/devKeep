@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import {
-  Plus, Download, ArrowLeft, CheckCircle2,
-  Clock, ExternalLink, Tag, FileText, Trash2, Award
+import { 
+  Plus, Download, ArrowLeft, CheckCircle2, 
+  Clock, ExternalLink, Tag, FileText, Trash2, Award, Edit3 
 } from 'lucide-react';
 import { courseService } from '../services/courseService';
 import { noteService } from '../services/noteService';
@@ -20,6 +20,7 @@ export const CourseDetailPage: React.FC = () => {
   const [selectedNote, setSelectedNote] = useState<CourseNote | null>(null);
   const [loading, setLoading] = useState(true);
   const [isNoteModalOpen, setIsNoteModalOpen] = useState(false);
+  const [editingNote, setEditingNote] = useState<CourseNote | null>(null);
 
   const [noteForm, setNoteForm] = useState<CreateNoteDto>({
     courseId: id || '',
@@ -38,7 +39,14 @@ export const CourseDetailPage: React.FC = () => {
       const data = await courseService.getCourseById(id);
       setCourse(data);
       if (data.notes && data.notes.length > 0) {
-        setSelectedNote(data.notes[0]);
+        if (selectedNote) {
+          const updatedSelected = data.notes.find((n) => n.id === selectedNote.id);
+          setSelectedNote(updatedSelected || data.notes[0]);
+        } else {
+          setSelectedNote(data.notes[0]);
+        }
+      } else {
+        setSelectedNote(null);
       }
     } catch (err) {
       toast.error('Error al cargar la información del curso');
@@ -52,7 +60,35 @@ export const CourseDetailPage: React.FC = () => {
     loadCourseData();
   }, [id]);
 
-  const handleCreateNote = async (e: React.FormEvent) => {
+  const handleOpenCreateNoteModal = () => {
+    setEditingNote(null);
+    setNoteForm({
+      courseId: id!,
+      lessonTitle: '',
+      sectionTitle: '',
+      videoTimestamp: '',
+      directUrl: '',
+      markdownContent: '',
+      tags: '',
+    });
+    setIsNoteModalOpen(true);
+  };
+
+  const handleOpenEditNoteModal = (note: CourseNote) => {
+    setEditingNote(note);
+    setNoteForm({
+      courseId: id!,
+      lessonTitle: note.lessonTitle,
+      sectionTitle: note.sectionTitle || '',
+      videoTimestamp: note.videoTimestamp || '',
+      directUrl: note.directUrl || '',
+      markdownContent: note.markdownContent,
+      tags: note.tags || '',
+    });
+    setIsNoteModalOpen(true);
+  };
+
+  const handleSaveNote = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!noteForm.lessonTitle.trim() || !noteForm.markdownContent.trim()) {
       toast.error('El título y contenido de la nota son obligatorios');
@@ -60,32 +96,40 @@ export const CourseDetailPage: React.FC = () => {
     }
 
     try {
-      const payload: CreateNoteDto = {
-        courseId: id!,
-        lessonTitle: noteForm.lessonTitle.trim(),
-        markdownContent: noteForm.markdownContent,
-        sectionTitle: noteForm.sectionTitle?.trim() || undefined,
-        videoTimestamp: noteForm.videoTimestamp?.trim() || undefined,
-        directUrl: noteForm.directUrl?.trim() || undefined,
-        tags: noteForm.tags?.trim() || undefined,
-      };
+      const sectionClean = noteForm.sectionTitle?.trim() || undefined;
+      const timestampClean = noteForm.videoTimestamp?.trim() || undefined;
+      const directUrlClean = noteForm.directUrl?.trim() || undefined;
+      const tagsClean = noteForm.tags?.trim() || undefined;
 
-      const newNote = await noteService.createNote(payload);
-      toast.success('Nota registrada en el curso', {
-        icon: <CheckCircle2 className="w-4 h-4 text-emerald-400" />,
-      });
+      if (editingNote) {
+        await noteService.updateNote(editingNote.id, {
+          lessonTitle: noteForm.lessonTitle.trim(),
+          markdownContent: noteForm.markdownContent,
+          sectionTitle: sectionClean,
+          videoTimestamp: timestampClean,
+          directUrl: directUrlClean,
+          tags: tagsClean || '',
+        });
+        toast.success('Nota actualizada correctamente');
+      } else {
+        const payload: CreateNoteDto = {
+          courseId: id!,
+          lessonTitle: noteForm.lessonTitle.trim(),
+          markdownContent: noteForm.markdownContent,
+          sectionTitle: sectionClean,
+          videoTimestamp: timestampClean,
+          directUrl: directUrlClean,
+          tags: tagsClean,
+        };
+        const newNote = await noteService.createNote(payload);
+        toast.success('Nota registrada en el curso', {
+          icon: <CheckCircle2 className="w-4 h-4 text-emerald-400" />,
+        });
+        setSelectedNote(newNote);
+      }
+
       setIsNoteModalOpen(false);
-      setNoteForm({
-        courseId: id!,
-        lessonTitle: '',
-        sectionTitle: '',
-        videoTimestamp: '',
-        directUrl: '',
-        markdownContent: '',
-        tags: '',
-      });
       await loadCourseData();
-      setSelectedNote(newNote);
     } catch (err: any) {
       const msg = err.response?.data?.message || err.response?.data?.detail || 'Error al guardar la nota';
       toast.error(msg);
@@ -195,7 +239,8 @@ export const CourseDetailPage: React.FC = () => {
               href={certFullUrl}
               target="_blank"
               rel="noreferrer"
-              className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-amber-400/10 text-amber-400 border border-amber-400/30 hover:bg-amber-400/20 text-xs font-semibold transition-colors"
+              className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-amber-400/10 text-amber-400 border border-amber-400/30 hover:bg-amber-400/20 text-xs font-semibold transition-colors btn-action-icon"
+              title="Ver o descargar certificado de finalización"
             >
               <Award className="w-4 h-4" />
               <span>Ver Certificado</span>
@@ -204,7 +249,7 @@ export const CourseDetailPage: React.FC = () => {
 
           <button
             onClick={handleExportMarkdown}
-            className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-dark-surface border border-dark-border hover:bg-dark-border text-dark-textMain text-xs font-medium transition-colors"
+            className="flex items-center gap-2 px-3.5 py-2 rounded-lg bg-dark-surface border border-dark-border hover:bg-dark-border text-dark-textMain text-xs font-medium transition-colors btn-action-icon"
             title="Exportar todas las notas del curso en archivo .md"
           >
             <Download className="w-4 h-4 text-cyanAccent" />
@@ -212,8 +257,8 @@ export const CourseDetailPage: React.FC = () => {
           </button>
 
           <button
-            onClick={() => setIsNoteModalOpen(true)}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-cyanAccent text-dark-bg font-semibold text-xs hover:bg-cyanAccent-hover transition-colors shadow-lg shadow-cyanAccent/20"
+            onClick={handleOpenCreateNoteModal}
+            className="flex items-center gap-2 px-4 py-2 rounded-lg bg-cyanAccent text-dark-bg font-semibold text-xs hover:bg-cyanAccent-hover transition-colors shadow-lg shadow-cyanAccent/20 btn-action-icon"
           >
             <Plus className="w-4 h-4" />
             <span>Nueva Nota</span>
@@ -248,7 +293,7 @@ export const CourseDetailPage: React.FC = () => {
               </div>
               <button
                 onClick={handleToggleLessonComplete}
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-cyanAccent/10 text-cyanAccent border border-cyanAccent/20 hover:bg-cyanAccent/20 text-xs font-medium transition-colors"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded bg-cyanAccent/10 text-cyanAccent border border-cyanAccent/20 hover:bg-cyanAccent/20 text-xs font-medium transition-colors btn-action-icon"
                 title="Marcar avance de lección"
               >
                 <CheckCircle2 className="w-3.5 h-3.5" />
@@ -341,13 +386,22 @@ export const CourseDetailPage: React.FC = () => {
                   </div>
                 </div>
 
-                <button
-                  onClick={() => handleDeleteNote(selectedNote.id)}
-                  className="p-2 rounded hover:bg-rose-500/10 text-dark-textMuted hover:text-rose-400 transition-colors"
-                  title="Eliminar nota"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </button>
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => handleOpenEditNoteModal(selectedNote)}
+                    className="p-2 rounded-lg hover:bg-cyanAccent/10 text-dark-textMuted hover:text-cyanAccent hover:border hover:border-cyanAccent/30 transition-all btn-action-icon"
+                    title="Editar esta nota"
+                  >
+                    <Edit3 className="w-4 h-4" />
+                  </button>
+                  <button
+                    onClick={() => handleDeleteNote(selectedNote.id)}
+                    className="p-2 rounded-lg hover:bg-rose-500/10 text-dark-textMuted hover:text-rose-400 hover:border hover:border-rose-500/30 transition-all btn-action-icon"
+                    title="Eliminar esta nota"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
 
               {/* Markdown Content Reader */}
@@ -381,13 +435,13 @@ export const CourseDetailPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Modal Form: Add Note */}
+      {/* Modal Form: Add / Edit Note */}
       <Modal
         isOpen={isNoteModalOpen}
         onClose={() => setIsNoteModalOpen(false)}
-        title={`Agregar Nota a "${course.title}"`}
+        title={editingNote ? `Editar Nota "${editingNote.lessonTitle}"` : `Agregar Nota a "${course.title}"`}
       >
-        <form onSubmit={handleCreateNote} className="space-y-4">
+        <form onSubmit={handleSaveNote} className="space-y-4">
           <div>
             <label className="block text-xs font-semibold text-dark-textMuted uppercase tracking-wider mb-1">
               Título de la Lección *
@@ -398,11 +452,11 @@ export const CourseDetailPage: React.FC = () => {
               value={noteForm.lessonTitle}
               onChange={(e) => setNoteForm({ ...noteForm, lessonTitle: e.target.value })}
               placeholder="Ej: Configuración de DbContext y Npgsql PostgreSQL"
-              className="w-full px-3 py-2 rounded-lg bg-dark-surface border border-dark-border text-dark-textMain focus:border-cyanAccent outline-none text-sm"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-dark-surface border border-dark-border text-dark-textMain focus:ring-2 focus:ring-cyanAccent/40 focus:border-cyanAccent outline-none text-sm transition-all shadow-inner"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-dark-textMuted uppercase tracking-wider mb-1">
                 Sección / Módulo
@@ -412,7 +466,7 @@ export const CourseDetailPage: React.FC = () => {
                 value={noteForm.sectionTitle}
                 onChange={(e) => setNoteForm({ ...noteForm, sectionTitle: e.target.value })}
                 placeholder="Ej: Módulo 3 - Persistencia"
-                className="w-full px-3 py-2 rounded-lg bg-dark-surface border border-dark-border text-dark-textMain focus:border-cyanAccent outline-none text-sm"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-dark-surface border border-dark-border text-dark-textMain focus:ring-2 focus:ring-cyanAccent/40 focus:border-cyanAccent outline-none text-sm transition-all shadow-inner"
               />
             </div>
 
@@ -425,7 +479,7 @@ export const CourseDetailPage: React.FC = () => {
                 value={noteForm.videoTimestamp}
                 onChange={(e) => setNoteForm({ ...noteForm, videoTimestamp: e.target.value })}
                 placeholder="Ej: 14:25"
-                className="w-full px-3 py-2 rounded-lg bg-dark-surface border border-dark-border text-dark-textMain focus:border-cyanAccent outline-none text-sm font-mono"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-dark-surface border border-dark-border text-dark-textMain focus:ring-2 focus:ring-cyanAccent/40 focus:border-cyanAccent outline-none text-sm font-mono transition-all shadow-inner"
               />
             </div>
           </div>
@@ -440,11 +494,11 @@ export const CourseDetailPage: React.FC = () => {
               value={noteForm.markdownContent}
               onChange={(e) => setNoteForm({ ...noteForm, markdownContent: e.target.value })}
               placeholder="Escribe tus notas en formato Markdown (soporta sintaxis de código, listas, fragmentos)..."
-              className="w-full px-3 py-2 rounded-lg bg-dark-surface border border-dark-border text-dark-textMain focus:border-cyanAccent outline-none text-sm font-mono leading-relaxed"
+              className="w-full px-3.5 py-2.5 rounded-xl bg-dark-surface border border-dark-border text-dark-textMain focus:ring-2 focus:ring-cyanAccent/40 focus:border-cyanAccent outline-none text-sm font-mono leading-relaxed transition-all shadow-inner"
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-dark-textMuted uppercase tracking-wider mb-1">
                 Etiquetas (Separadas por coma)
@@ -454,20 +508,20 @@ export const CourseDetailPage: React.FC = () => {
                 value={noteForm.tags}
                 onChange={(e) => setNoteForm({ ...noteForm, tags: e.target.value })}
                 placeholder="dotnet, efcore, postgresql"
-                className="w-full px-3 py-2 rounded-lg bg-dark-surface border border-dark-border text-dark-textMain focus:border-cyanAccent outline-none text-sm font-mono"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-dark-surface border border-dark-border text-dark-textMain focus:ring-2 focus:ring-cyanAccent/40 focus:border-cyanAccent outline-none text-sm font-mono transition-all shadow-inner"
               />
             </div>
 
             <div>
               <label className="block text-xs font-semibold text-dark-textMuted uppercase tracking-wider mb-1">
-                Enlace Directo
+                Enlace Directo (Opcional)
               </label>
               <input
                 type="url"
                 value={noteForm.directUrl}
                 onChange={(e) => setNoteForm({ ...noteForm, directUrl: e.target.value })}
                 placeholder="https://..."
-                className="w-full px-3 py-2 rounded-lg bg-dark-surface border border-dark-border text-dark-textMain focus:border-cyanAccent outline-none text-sm"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-dark-surface border border-dark-border text-dark-textMain focus:ring-2 focus:ring-cyanAccent/40 focus:border-cyanAccent outline-none text-sm transition-all shadow-inner"
               />
             </div>
           </div>
@@ -484,7 +538,7 @@ export const CourseDetailPage: React.FC = () => {
               type="submit"
               className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-cyanAccent text-dark-bg font-semibold text-sm hover:bg-cyanAccent-hover hover:shadow-lg hover:shadow-cyanAccent/20 transition-all active:scale-95 text-center shadow-md flex items-center justify-center gap-2"
             >
-              Guardar Nota
+              {editingNote ? 'Guardar Cambios' : 'Guardar Nota'}
             </button>
           </div>
         </form>
