@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { 
-  Plus, ExternalLink, Trash2, CheckCircle2, Upload, Award, 
-  Clock, Edit3 
-} from 'lucide-react';
+import { Plus, CheckCircle2, Upload, Award, Clock } from 'lucide-react';
 import { courseService } from '../services/courseService';
 import type { Course, CreateCourseDto, UpdateCourseDto } from '../types';
 import { Modal } from '../components/Modal';
+import { CourseCard } from '../components/course/CourseCard';
+import { useAuth } from '../context/AuthContext';
 import { toast } from 'sonner';
 
 export const CoursesPage: React.FC = () => {
+  const { isAdmin } = useAuth();
   const [courses, setCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -193,29 +192,6 @@ export const CoursesPage: React.FC = () => {
     }
   };
 
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case 'Completed':
-        return (
-          <span className="text-xs font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
-            Completado
-          </span>
-        );
-      case 'Not Started':
-        return (
-          <span className="text-xs font-mono px-2 py-0.5 rounded bg-dark-surface text-dark-textMuted border border-dark-border font-medium">
-            Por Empezar
-          </span>
-        );
-      default:
-        return (
-          <span className="text-xs font-mono px-2 py-0.5 rounded bg-cyanAccent/10 text-cyanAccent border border-cyanAccent/20 font-medium">
-            En Progreso
-          </span>
-        );
-    }
-  };
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -226,13 +202,15 @@ export const CoursesPage: React.FC = () => {
             Gestión y seguimiento de avance técnico con soporte de certificados y módulos por capítulo.
           </p>
         </div>
-        <button
-          onClick={handleOpenCreateModal}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-lg bg-cyanAccent text-dark-bg font-semibold text-sm hover:bg-cyanAccent-hover transition-colors shadow-lg shadow-cyanAccent/20"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Registrar Curso</span>
-        </button>
+        {isAdmin && (
+          <button
+            onClick={handleOpenCreateModal}
+            className="group flex items-center gap-2 px-4 py-2.5 rounded-xl bg-cyanAccent text-dark-bg font-semibold text-sm hover:bg-cyanAccent-hover hover:shadow-lg hover:shadow-cyanAccent/25 hover:-translate-y-0.5 active:scale-95 transition-all duration-200"
+          >
+            <Plus className="w-4 h-4 transition-transform duration-300 group-hover:rotate-90" />
+            <span>Registrar Curso</span>
+          </button>
+        )}
       </div>
 
       {/* Course Grid */}
@@ -246,107 +224,14 @@ export const CoursesPage: React.FC = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {courses.map((course) => {
-            const apiBase = import.meta.env.VITE_API_URL?.replace('/api', '') || 'http://localhost:5270';
-            const certFullUrl = course.certificateUrl?.startsWith('http')
-              ? course.certificateUrl
-              : `${apiBase}${course.certificateUrl}`;
-
-            return (
-              <Link
-                key={course.id}
-                to={`/courses/${course.id}`}
-                className="p-5 rounded-xl bg-dark-card border border-dark-border hover:border-dark-borderHover transition-all flex flex-col justify-between group shadow-sm hover:shadow-md"
-              >
-                <div>
-                  {/* Platform, Status Badge & Actions */}
-                  <div className="flex items-center justify-between gap-2 mb-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs font-mono px-2 py-0.5 rounded bg-cyanAccent/10 text-cyanAccent border border-cyanAccent/20 font-medium">
-                        {course.platform}
-                      </span>
-                      {getStatusBadge(course.status)}
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <button
-                        onClick={(e) => handleOpenEditModal(e, course)}
-                        className="p-1.5 rounded-lg hover:bg-cyanAccent/10 text-dark-textMuted hover:text-cyanAccent hover:border hover:border-cyanAccent/30 transition-all btn-action-icon"
-                        title="Editar información del curso"
-                      >
-                        <Edit3 className="w-4 h-4" />
-                      </button>
-                      {course.courseUrl && (
-                        <a
-                          href={course.courseUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          onClick={(e) => e.stopPropagation()}
-                          className="p-1.5 rounded-lg hover:bg-cyanAccent/10 text-dark-textMuted hover:text-cyanAccent hover:border hover:border-cyanAccent/30 transition-all btn-action-icon"
-                          title="Abrir enlace del curso en una nueva pestaña"
-                        >
-                          <ExternalLink className="w-4 h-4" />
-                        </a>
-                      )}
-                      <button
-                        onClick={(e) => handleDeleteCourse(e, course.id, course.title)}
-                        className="p-1.5 rounded-lg hover:bg-rose-500/10 text-dark-textMuted hover:text-rose-400 hover:border hover:border-rose-500/30 transition-all btn-action-icon"
-                        title="Eliminar este curso"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* Title & Instructor */}
-                  <h3 className="font-semibold text-lg text-dark-textMain group-hover:text-cyanAccent transition-colors leading-snug line-clamp-2">
-                    {course.title}
-                  </h3>
-                  {course.instructor && (
-                    <p className="text-xs text-dark-textMuted mt-1">Instructor: {course.instructor}</p>
-                  )}
-
-                  {/* Chapter & Certificate Badges */}
-                  <div className="flex flex-wrap items-center gap-2 mt-3">
-                    {course.totalChapters > 0 && (
-                      <span className="text-xs font-mono px-2 py-0.5 rounded bg-dark-surface text-dark-textMuted border border-dark-border">
-                        Cap. {course.currentChapter}/{course.totalChapters}
-                      </span>
-                    )}
-
-                    {course.status === 'Completed' && course.certificateUrl && (
-                      <a
-                        href={certFullUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="flex items-center gap-1 text-xs font-mono px-2.5 py-1 rounded bg-amber-400/10 text-amber-400 border border-amber-400/30 hover:bg-amber-400/20 transition-colors font-medium btn-action-icon"
-                        title="Ver o descargar certificado de finalización"
-                      >
-                        <Award className="w-3.5 h-3.5" />
-                        <span>Ver Certificado</span>
-                      </a>
-                    )}
-                  </div>
-                </div>
-
-                {/* Progress & Lessons Info */}
-                <div className="mt-6 pt-4 border-t border-dark-border">
-                  <div className="flex items-center justify-between text-xs text-dark-textMuted font-mono mb-1.5">
-                    <span>{course.completedLessons} / {course.totalLessons} lecciones</span>
-                    <span className="font-semibold text-dark-textMain">{course.progressPercentage}%</span>
-                  </div>
-                  <div className="w-full bg-dark-bg h-2 rounded-full overflow-hidden">
-                    <div
-                      className={`h-full rounded-full transition-all duration-300 ${
-                        course.status === 'Completed' ? 'bg-emerald-400' : 'bg-cyanAccent'
-                      }`}
-                      style={{ width: `${course.progressPercentage}%` }}
-                    ></div>
-                  </div>
-                </div>
-              </Link>
-            );
-          })}
+          {courses.map((course) => (
+            <CourseCard
+              key={course.id}
+              course={course}
+              onEdit={handleOpenEditModal}
+              onDelete={handleDeleteCourse}
+            />
+          ))}
         </div>
       )}
 
@@ -542,14 +427,14 @@ export const CoursesPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setIsModalOpen(false)}
-              className="w-full sm:w-auto px-4 py-2.5 rounded-xl bg-dark-surface border border-dark-border text-dark-textMuted hover:text-dark-textMain hover:bg-dark-border/40 hover:border-dark-borderHover font-medium text-sm transition-all active:scale-95 shadow-sm text-center"
+              className="w-full sm:w-auto btn-secondary"
             >
               Cancelar
             </button>
             <button
               type="submit"
               disabled={uploadingCert}
-              className="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-cyanAccent text-dark-bg font-semibold text-sm hover:bg-cyanAccent-hover hover:shadow-lg hover:shadow-cyanAccent/20 transition-all active:scale-95 disabled:opacity-50 text-center shadow-md flex items-center justify-center gap-2"
+              className="w-full sm:w-auto btn-primary"
             >
               {uploadingCert ? 'Guardando...' : 'Guardar Curso'}
             </button>

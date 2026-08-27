@@ -26,6 +26,7 @@ DevKeep.Api/wwwroot/certificates/*
 
 # Sensitive local settings and environment files
 .env
+.env.*
 .env.local
 .env.development.local
 appsettings.Local.json

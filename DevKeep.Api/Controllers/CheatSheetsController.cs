@@ -1,5 +1,6 @@
 using DevKeep.Api.Data;
 using DevKeep.Api.DTOs;
+using DevKeep.Api.Middleware;
 using DevKeep.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -56,6 +57,7 @@ public class CheatSheetsController : ControllerBase
     }
 
     [HttpPost]
+    [AdminAuth]
     public async Task<ActionResult<CheatSheetItem>> CreateCheatSheet(CreateCheatSheetDto dto)
     {
         var item = new CheatSheetItem
@@ -75,6 +77,7 @@ public class CheatSheetsController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [AdminAuth]
     public async Task<IActionResult> UpdateCheatSheet(Guid id, UpdateCheatSheetDto dto)
     {
         var item = await _context.CheatSheetItems.FindAsync(id);
@@ -91,6 +94,7 @@ public class CheatSheetsController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
+    [AdminAuth]
     public async Task<IActionResult> DeleteCheatSheet(Guid id)
     {
         var item = await _context.CheatSheetItems.FindAsync(id);

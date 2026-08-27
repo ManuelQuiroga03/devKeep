@@ -1,5 +1,23 @@
 @import "tailwindcss";
 
+@theme {
+  --color-dark-bg: #090d16;
+  --color-dark-card: #0f172a;
+  --color-dark-surface: #182234;
+  --color-dark-border: #1e293b;
+  --color-dark-borderHover: #334155;
+  --color-dark-textMuted: #94a3b8;
+  --color-dark-textMain: #f8fafc;
+
+  --color-cyanAccent: #06b6d4;
+  --color-cyanAccent-hover: #0891b2;
+  --color-cyanAccent-light: #22d3ee;
+
+  --color-indigoAccent: #6366f1;
+  --color-indigoAccent-hover: #4f46e5;
+  --color-indigoAccent-light: #818cf8;
+}
+
 @layer base {
   :root {
     color-scheme: dark;
@@ -84,7 +102,133 @@
   transform: translateY(0);
 }
 
-/* Markdown List Rendering Styles */
+/* Global Reusable Component Button Utility Classes */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.75rem;
+  background-color: #06b6d4;
+  color: #090d16;
+  font-weight: 600;
+  font-size: 0.875rem;
+  box-shadow: 0 10px 15px -3px rgba(6, 182, 212, 0.2);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #0891b2;
+  box-shadow: 0 10px 25px -3px rgba(6, 182, 212, 0.35);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active:not(:disabled) {
+  transform: scale(0.96) translateY(0);
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.125rem;
+  border-radius: 0.75rem;
+  background-color: #0f172a;
+  border: 1px solid #1e293b;
+  color: #94a3b8;
+  font-weight: 500;
+  font-size: 0.875rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.btn-secondary:hover {
+  color: #f8fafc;
+  background-color: rgba(30, 41, 59, 0.6);
+  border-color: #334155;
+}
+
+.btn-secondary:active {
+  transform: scale(0.96);
+}
+
+.btn-danger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  background-color: rgba(244, 63, 94, 0.1);
+  color: #fb7185;
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  font-weight: 500;
+  font-size: 0.75rem;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+}
+
+.btn-danger:hover {
+  background-color: rgba(244, 63, 94, 0.2);
+  border-color: rgba(244, 63, 94, 0.5);
+  box-shadow: 0 0 15px rgba(244, 63, 94, 0.2);
+}
+
+.btn-danger:active {
+  transform: scale(0.95);
+}
+
+/* Markdown Typography Styles */
+.prose h1 {
+  font-size: 1.75rem !important;
+  font-weight: 800 !important;
+  color: #06b6d4 !important;
+  margin-top: 1rem !important;
+  margin-bottom: 0.5rem !important;
+  line-height: 1.2 !important;
+}
+
+.prose h2 {
+  font-size: 1.4rem !important;
+  font-weight: 700 !important;
+  color: #f8fafc !important;
+  margin-top: 0.85rem !important;
+  margin-bottom: 0.4rem !important;
+  border-bottom: 1px solid #1e293b;
+  padding-bottom: 0.25rem;
+  line-height: 1.3 !important;
+}
+
+.prose h3 {
+  font-size: 1.15rem !important;
+  font-weight: 600 !important;
+  color: #6366f1 !important;
+  margin-top: 0.75rem !important;
+  margin-bottom: 0.35rem !important;
+  line-height: 1.3 !important;
+}
+
+.prose h4 {
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  color: #38bdf8 !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.prose p {
+  margin-top: 0.4rem !important;
+  margin-bottom: 0.4rem !important;
+}
+
 .prose ul {
   list-style-type: disc !important;
   padding-left: 1.5rem !important;
@@ -102,4 +246,22 @@
 .prose li {
   margin-top: 0.25rem !important;
   margin-bottom: 0.25rem !important;
+}
+
+.prose blockquote {
+  border-left: 4px solid #06b6d4 !important;
+  padding-left: 1rem !important;
+  color: #94a3b8 !important;
+  font-style: italic !important;
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.prose a {
+  color: #06b6d4 !important;
+  text-decoration: underline !important;
+}
+
+.prose a:hover {
+  color: #38bdf8 !important;
 }

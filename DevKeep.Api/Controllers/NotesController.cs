@@ -1,5 +1,6 @@
 using DevKeep.Api.Data;
 using DevKeep.Api.DTOs;
+using DevKeep.Api.Middleware;
 using DevKeep.Api.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -47,6 +48,7 @@ public class NotesController : ControllerBase
     }
 
     [HttpPost]
+    [AdminAuth]
     public async Task<ActionResult<CourseNote>> CreateNote(CreateNoteDto dto)
     {
         var courseExists = await _context.Courses.AnyAsync(c => c.Id == dto.CourseId);
@@ -74,6 +76,7 @@ public class NotesController : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [AdminAuth]
     public async Task<IActionResult> UpdateNote(Guid id, UpdateNoteDto dto)
     {
         var note = await _context.CourseNotes.FindAsync(id);
@@ -92,6 +95,7 @@ public class NotesController : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
+    [AdminAuth]
     public async Task<IActionResult> DeleteNote(Guid id)
     {
         var note = await _context.CourseNotes.FindAsync(id);

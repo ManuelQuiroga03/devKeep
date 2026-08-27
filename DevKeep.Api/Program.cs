@@ -23,6 +23,7 @@ builder.Services.AddSwaggerGen(c =>
 
 // Services DI Registration
 builder.Services.AddScoped<IMarkdownExportService, MarkdownExportService>();
+builder.Services.AddScoped<ICourseService, CourseService>();
 
 // Global Exception Handler (.NET 8 Native)
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();

@@ -49,15 +49,22 @@ export const Sidebar: React.FC = () => {
                 key={item.path}
                 to={item.path}
                 className={({ isActive }) =>
-                  `flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all duration-150 ${
+                  `group relative flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ease-in-out ${
                     isActive
-                      ? 'bg-cyanAccent/10 text-cyanAccent border border-cyanAccent/20 shadow-sm'
-                      : 'text-dark-textMuted hover:text-dark-textMain hover:bg-dark-surface'
+                      ? 'bg-gradient-to-r from-cyanAccent/15 via-cyanAccent/10 to-transparent text-cyanAccent border border-cyanAccent/30 shadow-lg shadow-cyanAccent/5 font-semibold translate-x-1'
+                      : 'text-dark-textMuted hover:text-dark-textMain hover:bg-dark-surface/80 hover:translate-x-1.5 hover:border-l-2 hover:border-cyanAccent/50'
                   }`
                 }
               >
-                <Icon className="w-4 h-4" />
-                <span>{item.name}</span>
+                {({ isActive }) => (
+                  <>
+                    <Icon className="w-4 h-4 transition-transform duration-200 group-hover:scale-110 group-hover:text-cyanAccent" />
+                    <span className="tracking-wide">{item.name}</span>
+                    {isActive && (
+                      <span className="absolute right-2 w-1.5 h-5 rounded-full bg-cyanAccent shadow-[0_0_8px_#06b6d4]"></span>
+                    )}
+                  </>
+                )}
               </NavLink>
             );
           })}

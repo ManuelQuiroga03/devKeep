@@ -26,6 +26,22 @@ export const CommandPaletteModal: React.FC<CommandPaletteModalProps> = ({ isOpen
     }
   }, [isOpen]);
 
+  //Listener para cerrar el modal de busqueda
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    if(isOpen){
+      window.addEventListener('keydown', handleKeyDown);
+    }
+    
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [onClose, isOpen]);
+
+  //Listener para buscar en la base de datos
   useEffect(() => {
     const timer = setTimeout(async () => {
       if (query.trim()) {

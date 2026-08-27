@@ -6,9 +6,18 @@ interface ModalProps {
   onClose: () => void;
   title: string;
   children: React.ReactNode;
+  maxWidth?: string;
+  className?: string;
 }
 
-export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }) => {
+export const Modal: React.FC<ModalProps> = ({ 
+  isOpen, 
+  onClose, 
+  title, 
+  children, 
+  maxWidth = 'max-w-lg',
+  className = ''
+}) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose();
@@ -26,24 +35,28 @@ export const Modal: React.FC<ModalProps> = ({ isOpen, onClose, title, children }
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+    <div 
+      className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/80 backdrop-blur-sm transition-all duration-200"
+      onClick={onClose}
+    >
       <div 
-        className="w-full max-w-lg bg-dark-card border border-dark-border rounded-xl shadow-2xl overflow-hidden transform transition-all"
+        className={`w-full ${maxWidth} bg-dark-card border border-dark-border rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-200 flex flex-col max-h-[95vh] ${className}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-dark-border bg-dark-surface">
-          <h3 className="text-lg font-semibold text-dark-textMain">{title}</h3>
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3.5 border-b border-dark-border bg-dark-surface shrink-0">
+          <h3 className="text-base sm:text-lg font-semibold text-dark-textMain line-clamp-1">{title}</h3>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-dark-textMuted hover:text-dark-textMain hover:bg-dark-border transition-colors"
+            className="group p-1.5 rounded-lg text-dark-textMuted hover:text-rose-400 hover:bg-rose-500/15 active:scale-90 transition-all duration-200"
+            title="Cerrar modal (Esc)"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5 transition-transform duration-200 group-hover:rotate-90" />
           </button>
         </div>
 
         {/* Content */}
-        <div className="p-6 max-h-[80vh] overflow-y-auto">
+        <div className="p-4 sm:p-6 overflow-y-auto grow flex flex-col">
           {children}
         </div>
       </div>
