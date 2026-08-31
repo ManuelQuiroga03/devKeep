@@ -109,4 +109,69 @@ public class CourseService : ICourseService
         await _context.SaveChangesAsync();
         return relativeUrl;
     }
+
+    public async Task<Course?> IncrementChapterAsync(Guid id)
+    {
+        var course = await _context.Courses.FindAsync(id);
+        if (course == null) return null;
+
+        if (course.TotalChapters > 0)
+        {
+            var isIncrementing = course.CurrentChapter < course.TotalChapters;
+            course.CurrentChapter = isIncrementing ? course.CurrentChapter + 1 : Math.Max(0, course.CurrentChapter - 1);
+            
+            if (course.CurrentChapter == course.TotalChapters)
+            {
+                course.Status = "Completed";
+            }
+            else if (course.CurrentChapter > 0 && course.Status == "Not Started")
+            {
+                course.Status = "In Progress";
+            }
+
+            // Proportionally update completed lessons if both are defined
+            if (course.TotalLessons > 0 && course.TotalChapters > 0)
+            {
+                var proportionalLessons = (int)Math.Round((double)course.CurrentChapter / course.TotalChapters * course.TotalLessons);
+                course.CompletedLessons = Math.Min(course.TotalLessons, proportionalLessons);
+            }
+        }
+        else
+        {
+            // Fallback: If no TotalChapters set, increment CurrentChapter by 1
+            course.CurrentChapter++;
+        }
+
+        await _context.SaveChangesAsync();
+        return course;
+    }
+
+    public async Task<Course?> IncrementLessonAsync(Guid id)
+    {
+        var course = await _context.Courses.FindAsync(id);
+        if (course == null) return null;
+
+        if (course.TotalLessons > 0)
+        {
+            var isIncrementing = course.CompletedLessons < course.TotalLessons;
+            course.CompletedLessons = isIncrementing ? course.CompletedLessons + 1 : Math.Max(0, course.CompletedLessons - 1);
+
+            if (course.CompletedLessons == course.TotalLessons)
+            {
+                course.Status = "Completed";
+            }
+            else if (course.CompletedLessons > 0 && course.Status == "Not Started")
+            {
+                course.Status = "In Progress";
+            }
+        }
+        else
+        {
+            // Fallback
+            course.CompletedLessons++;
+        }
+
+        await _context.SaveChangesAsync();
+        return course;
+    }
 }

@@ -25,6 +25,16 @@ export const courseService = {
     await apiClient.delete(`/courses/${id}`);
   },
 
+  async incrementChapter(id: string): Promise<Course> {
+    const response = await apiClient.post<Course>(`/courses/${id}/increment-chapter`);
+    return response.data;
+  },
+
+  async incrementLesson(id: string): Promise<Course> {
+    const response = await apiClient.post<Course>(`/courses/${id}/increment-lesson`);
+    return response.data;
+  },
+
   async uploadCertificate(id: string, file: File): Promise<{ message: string; certificateUrl: string }> {
     const formData = new FormData();
     formData.append('file', file);

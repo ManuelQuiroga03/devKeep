@@ -25,10 +25,15 @@ public class Course
         {
             if (Status.Equals("Completed", StringComparison.OrdinalIgnoreCase))
                 return 100m;
-            if (TotalLessons > 0)
-                return Math.Min(100m, Math.Round((decimal)CompletedLessons / TotalLessons * 100, 2));
+            
+            // Prioritize fine-grained chapter progress when TotalChapters is defined
             if (TotalChapters > 0)
                 return Math.Min(100m, Math.Round((decimal)CurrentChapter / TotalChapters * 100, 2));
+
+            // Fallback to lessons progress
+            if (TotalLessons > 0)
+                return Math.Min(100m, Math.Round((decimal)CompletedLessons / TotalLessons * 100, 2));
+
             return 0m;
         }
     }

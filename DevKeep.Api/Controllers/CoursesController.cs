@@ -75,4 +75,22 @@ public class CoursesController : ControllerBase
 
         return Ok(new { certificateUrl = relativeUrl });
     }
+
+    [HttpPost("{id}/increment-chapter")]
+    [AdminAuth]
+    public async Task<ActionResult<Course>> IncrementChapter(Guid id)
+    {
+        var updated = await _courseService.IncrementChapterAsync(id);
+        if (updated == null) return NotFound(new { message = "Curso no encontrado" });
+        return Ok(updated);
+    }
+
+    [HttpPost("{id}/increment-lesson")]
+    [AdminAuth]
+    public async Task<ActionResult<Course>> IncrementLesson(Guid id)
+    {
+        var updated = await _courseService.IncrementLessonAsync(id);
+        if (updated == null) return NotFound(new { message = "Curso no encontrado" });
+        return Ok(updated);
+    }
 }

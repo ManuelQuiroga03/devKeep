@@ -139,34 +139,29 @@ export const CourseDetailPage: React.FC = () => {
     }
   };
 
+  const handleIncrementChapter = async () => {
+    if (!course) return;
+    try {
+      const updated = await courseService.incrementChapter(course.id);
+      setCourse({
+        ...updated,
+        notes: course.notes,
+      });
+      toast.success(`Capítulo avanzado (${updated.currentChapter}/${updated.totalChapters})`);
+    } catch (err) {
+      toast.error('Error al avanzar capítulo');
+    }
+  };
+
   const handleToggleLessonComplete = async () => {
     if (!course) return;
-    const isIncrementing = course.completedLessons < course.totalLessons;
-    const newCompleted = isIncrementing ? course.completedLessons + 1 : Math.max(0, course.completedLessons - 1);
-    const newStatus = newCompleted === course.totalLessons && course.totalLessons > 0 ? 'Completed' : 'In Progress';
-
     try {
-      await courseService.updateCourse(course.id, {
-        title: course.title,
-        platform: course.platform,
-        instructor: course.instructor,
-        courseUrl: course.courseUrl,
-        totalChapters: course.totalChapters,
-        currentChapter: course.currentChapter,
-        totalLessons: course.totalLessons,
-        completedLessons: newCompleted,
-        status: newStatus,
-        certificateUrl: course.certificateUrl,
-      });
-
+      const updated = await courseService.incrementLesson(course.id);
       setCourse({
-        ...course,
-        completedLessons: newCompleted,
-        status: newStatus,
-        progressPercentage: course.totalLessons > 0 ? Math.round((newCompleted / course.totalLessons) * 100) : 0,
+        ...updated,
+        notes: course.notes,
       });
-
-      toast.success(`Lección marcada (${newCompleted}/${course.totalLessons})`);
+      toast.success(`Lección marcada (${updated.completedLessons}/${updated.totalLessons})`);
     } catch (err) {
       toast.error('Error al actualizar avance');
     }
@@ -226,6 +221,7 @@ export const CourseDetailPage: React.FC = () => {
         <div className="space-y-4">
           <ProgressBarCard
             course={course}
+            onIncrementChapter={handleIncrementChapter}
             onToggleLessonComplete={handleToggleLessonComplete}
           />
           <NoteList

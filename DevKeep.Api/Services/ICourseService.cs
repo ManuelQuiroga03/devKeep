@@ -11,4 +11,6 @@ public interface ICourseService
     Task<Course?> UpdateCourseAsync(Guid id, UpdateCourseDto dto);
     Task<bool> DeleteCourseAsync(Guid id);
     Task<string?> UploadCertificateAsync(Guid id, IFormFile file);
+    Task<Course?> IncrementChapterAsync(Guid id);
+    Task<Course?> IncrementLessonAsync(Guid id);
 }
