@@ -1,54 +1,70 @@
 @import "tailwindcss";
 
-@theme {
-  --color-dark-bg: #090d16;
-  --color-dark-card: #0f172a;
-  --color-dark-surface: #182234;
-  --color-dark-border: #1e293b;
-  --color-dark-borderHover: #334155;
-  --color-dark-textMuted: #94a3b8;
-  --color-dark-textMain: #f8fafc;
-
-  --color-cyanAccent: #06b6d4;
-  --color-cyanAccent-hover: #0891b2;
-  --color-cyanAccent-light: #22d3ee;
-
-  --color-indigoAccent: #6366f1;
-  --color-indigoAccent-hover: #4f46e5;
-  --color-indigoAccent-light: #818cf8;
-}
-
 @layer base {
-  :root {
+  :root, html.dark {
+    --color-dark-bg: #09090b;
+    --color-dark-card: #141417;
+    --color-dark-surface: #1c1c21;
+    --color-dark-border: #27272a;
+    --color-dark-borderHover: #3f3f46;
+    --color-dark-textMuted: #a1a1aa;
+    --color-dark-textMain: #f4f4f5;
+
+    --btn-primary-bg: #f4f4f5;
+    --btn-primary-text: #09090b;
+    --btn-primary-border: #e4e4e7;
+    --btn-primary-hover-bg: #ffffff;
+
+    --btn-secondary-bg: #1c1c21;
+    --btn-secondary-border: #27272a;
+    --btn-secondary-text: #a1a1aa;
+    --btn-secondary-hover-bg: #27272a;
+    --btn-secondary-hover-text: #f4f4f5;
+
     color-scheme: dark;
+  }
+
+  html.light {
+    --color-dark-bg: #f4f4f5;
+    --color-dark-card: #ffffff;
+    --color-dark-surface: #e4e4e7;
+    --color-dark-border: #e4e4e7;
+    --color-dark-borderHover: #d4d4d8;
+    --color-dark-textMuted: #71717a;
+    --color-dark-textMain: #09090b;
+
+    --btn-primary-bg: #09090b;
+    --btn-primary-text: #ffffff;
+    --btn-primary-border: #18181b;
+    --btn-primary-hover-bg: #18181b;
+
+    --btn-secondary-bg: #ffffff;
+    --btn-secondary-border: #e4e4e7;
+    --btn-secondary-text: #52525b;
+    --btn-secondary-hover-bg: #f4f4f5;
+    --btn-secondary-hover-text: #09090b;
+
+    color-scheme: light;
   }
   
   body {
-    background-color: #090d16;
-    color: #f8fafc;
+    background-color: var(--color-dark-bg);
+    color: var(--color-dark-textMain);
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 
-  /* Fix for HTML Select Dropdown Menus in Dark Mode */
+  /* Fix for HTML Select Dropdown Menus */
   select {
-    color-scheme: dark;
-    background-color: #0f172a;
-    color: #f8fafc;
+    background-color: var(--color-dark-card);
+    color: var(--color-dark-textMain);
   }
 
   select option {
-    background-color: #0f172a !important;
-    color: #f8fafc !important;
+    background-color: var(--color-dark-card) !important;
+    color: var(--color-dark-textMain) !important;
     padding: 8px 12px;
-  }
-
-  select option:hover,
-  select option:focus,
-  select option:active,
-  select option:checked {
-    background-color: #1e293b !important;
-    color: #06b6d4 !important;
   }
 }
 
@@ -59,34 +75,34 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #090d16;
+  background: var(--color-dark-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: var(--color-dark-border);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: var(--color-dark-borderHover);
 }
 
 /* Glassmorphism utility */
 .glass-panel {
-  background: rgba(15, 23, 42, 0.85);
+  background: var(--color-dark-card);
   backdrop-filter: blur(12px);
-  border: 1px solid #1e293b;
+  border: 1px solid var(--color-dark-border);
 }
 
 .glass-card {
-  background: #0f172a;
-  border: 1px solid #1e293b;
+  background: var(--color-dark-card);
+  border: 1px solid var(--color-dark-border);
   transition: all 0.2s ease-in-out;
 }
 
 .glass-card:hover {
-  border-color: #334155;
-  box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.4);
+  border-color: var(--color-dark-borderHover);
+  box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.15);
 }
 
 /* Action Button Micro-Interactions */
@@ -102,7 +118,7 @@
   transform: translateY(0);
 }
 
-/* Global Reusable Component Button Utility Classes */
+/* Global Reusable Component Button Utility Classes - Dynamic Theme High-Contrast */
 .btn-primary {
   display: inline-flex;
   align-items: center;
@@ -110,23 +126,24 @@
   gap: 0.5rem;
   padding: 0.625rem 1.25rem;
   border-radius: 0.75rem;
-  background-color: #06b6d4;
-  color: #090d16;
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
   font-weight: 600;
   font-size: 0.875rem;
-  box-shadow: 0 10px 15px -3px rgba(6, 182, 212, 0.2);
+  border: 1px solid var(--btn-primary-border);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background-color: #0891b2;
-  box-shadow: 0 10px 25px -3px rgba(6, 182, 212, 0.35);
+  background-color: var(--btn-primary-hover-bg);
+  box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.15);
   transform: translateY(-1px);
 }
 
 .btn-primary:active:not(:disabled) {
-  transform: scale(0.96) translateY(0);
+  transform: scale(0.97) translateY(0);
 }
 
 .btn-primary:disabled {
@@ -141,9 +158,9 @@
   gap: 0.5rem;
   padding: 0.625rem 1.125rem;
   border-radius: 0.75rem;
-  background-color: #0f172a;
-  border: 1px solid #1e293b;
-  color: #94a3b8;
+  background-color: var(--btn-secondary-bg);
+  border: 1px solid var(--btn-secondary-border);
+  color: var(--btn-secondary-text);
   font-weight: 500;
   font-size: 0.875rem;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
@@ -151,13 +168,13 @@
 }
 
 .btn-secondary:hover {
-  color: #f8fafc;
-  background-color: rgba(30, 41, 59, 0.6);
-  border-color: #334155;
+  color: var(--btn-secondary-hover-text);
+  background-color: var(--btn-secondary-hover-bg);
+  border-color: var(--color-dark-borderHover);
 }
 
 .btn-secondary:active {
-  transform: scale(0.96);
+  transform: scale(0.97);
 }
 
 .btn-danger {
@@ -167,9 +184,9 @@
   gap: 0.5rem;
   padding: 0.5rem 1rem;
   border-radius: 0.75rem;
-  background-color: rgba(244, 63, 94, 0.1);
+  background-color: rgba(244, 63, 94, 0.08);
   color: #fb7185;
-  border: 1px solid rgba(244, 63, 94, 0.3);
+  border: 1px solid rgba(244, 63, 94, 0.25);
   font-weight: 500;
   font-size: 0.75rem;
   transition: all 0.2s ease-in-out;
@@ -177,20 +194,20 @@
 }
 
 .btn-danger:hover {
-  background-color: rgba(244, 63, 94, 0.2);
-  border-color: rgba(244, 63, 94, 0.5);
-  box-shadow: 0 0 15px rgba(244, 63, 94, 0.2);
+  background-color: rgba(244, 63, 94, 0.18);
+  border-color: rgba(244, 63, 94, 0.45);
+  box-shadow: 0 0 15px rgba(244, 63, 94, 0.15);
 }
 
 .btn-danger:active {
-  transform: scale(0.95);
+  transform: scale(0.97);
 }
 
 /* Markdown Typography Styles */
 .prose h1 {
   font-size: 1.75rem !important;
   font-weight: 800 !important;
-  color: #06b6d4 !important;
+  color: var(--color-dark-textMain) !important;
   margin-top: 1rem !important;
   margin-bottom: 0.5rem !important;
   line-height: 1.2 !important;
@@ -199,10 +216,10 @@
 .prose h2 {
   font-size: 1.4rem !important;
   font-weight: 700 !important;
-  color: #f8fafc !important;
+  color: var(--color-dark-textMain) !important;
   margin-top: 0.85rem !important;
   margin-bottom: 0.4rem !important;
-  border-bottom: 1px solid #1e293b;
+  border-bottom: 1px solid var(--color-dark-border);
   padding-bottom: 0.25rem;
   line-height: 1.3 !important;
 }
@@ -210,7 +227,7 @@
 .prose h3 {
   font-size: 1.15rem !important;
   font-weight: 600 !important;
-  color: #6366f1 !important;
+  color: #38bdf8 !important;
   margin-top: 0.75rem !important;
   margin-bottom: 0.35rem !important;
   line-height: 1.3 !important;
@@ -219,7 +236,7 @@
 .prose h4 {
   font-size: 1rem !important;
   font-weight: 600 !important;
-  color: #38bdf8 !important;
+  color: var(--color-dark-textMuted) !important;
   margin-top: 0.5rem !important;
   margin-bottom: 0.25rem !important;
 }
@@ -249,19 +266,19 @@
 }
 
 .prose blockquote {
-  border-left: 4px solid #06b6d4 !important;
+  border-left: 4px solid #38bdf8 !important;
   padding-left: 1rem !important;
-  color: #94a3b8 !important;
+  color: var(--color-dark-textMuted) !important;
   font-style: italic !important;
   margin-top: 0.5rem !important;
   margin-bottom: 0.5rem !important;
 }
 
 .prose a {
-  color: #06b6d4 !important;
+  color: #0284c7 !important;
   text-decoration: underline !important;
 }
 
 .prose a:hover {
-  color: #38bdf8 !important;
+  color: #0369a1 !important;
 }

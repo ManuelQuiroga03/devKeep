@@ -23,19 +23,19 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onEdit, onDelete
     switch (status) {
       case 'Completed':
         return (
-          <span className="text-xs font-mono px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
+          <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium">
             Completado
           </span>
         );
       case 'Not Started':
         return (
-          <span className="text-xs font-mono px-2 py-0.5 rounded bg-dark-surface text-dark-textMuted border border-dark-border font-medium">
+          <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-zinc-800/60 text-zinc-400 border border-zinc-700/50 font-medium">
             Por Empezar
           </span>
         );
       default:
         return (
-          <span className="text-xs font-mono px-2 py-0.5 rounded bg-cyanAccent/10 text-cyanAccent border border-cyanAccent/20 font-medium">
+          <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-sky-500/10 text-sky-400 border border-sky-500/20 font-medium">
             En Progreso
           </span>
         );
@@ -61,13 +61,13 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onEdit, onDelete
   return (
     <div
       onClick={() => navigate(`/courses/${course.id}`)}
-      className="p-5 rounded-2xl bg-dark-card border border-dark-border hover:border-cyanAccent/80 hover:shadow-[0_0_25px_rgba(6,182,212,0.22)] hover:-translate-y-1.5 transition-all duration-300 ease-in-out flex flex-col justify-between group cursor-pointer"
+      className="p-5 rounded-2xl bg-dark-card border border-dark-border hover:border-zinc-500 hover:shadow-[0_8px_24px_-6px_rgba(0,0,0,0.6)] hover:-translate-y-1 transition-all duration-200 ease-in-out flex flex-col justify-between group cursor-pointer"
     >
       <div>
         {/* Platform, Status Badge & Actions */}
         <div className="flex items-center justify-between gap-2 mb-3">
           <div className="flex items-center gap-2">
-            <span className="text-xs font-mono px-2 py-0.5 rounded bg-cyanAccent/10 text-cyanAccent border border-cyanAccent/20 font-medium">
+            <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-zinc-800/80 text-zinc-300 border border-zinc-700/60 font-medium">
               {course.platform}
             </span>
             {getStatusBadge(course.status)}
@@ -76,7 +76,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onEdit, onDelete
             {isAdmin && (
               <button
                 onClick={(e) => onEdit(e, course)}
-                className="p-1.5 rounded-lg hover:bg-cyanAccent/10 text-dark-textMuted hover:text-cyanAccent hover:border hover:border-cyanAccent/30 transition-all btn-action-icon"
+                className="p-1.5 rounded-lg hover:bg-zinc-800 text-dark-textMuted hover:text-dark-textMain hover:border hover:border-zinc-700 transition-all btn-action-icon"
                 title="Editar información del curso"
               >
                 <Edit3 className="w-4 h-4" />
@@ -89,7 +89,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onEdit, onDelete
                 target="_blank"
                 rel="noreferrer"
                 onClick={(e) => e.stopPropagation()}
-                className="p-1.5 rounded-lg hover:bg-cyanAccent/10 text-dark-textMuted hover:text-cyanAccent hover:border hover:border-cyanAccent/30 transition-all btn-action-icon"
+                className="p-1.5 rounded-lg hover:bg-zinc-800 text-dark-textMuted hover:text-dark-textMain hover:border hover:border-zinc-700 transition-all btn-action-icon"
                 title="Abrir enlace del curso en una nueva pestaña"
               >
                 <ExternalLink className="w-4 h-4" />
@@ -109,7 +109,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onEdit, onDelete
         </div>
 
         {/* Title & Instructor */}
-        <h3 className="font-semibold text-lg text-dark-textMain group-hover:text-cyanAccent transition-colors leading-snug line-clamp-2">
+        <h3 className="font-semibold text-lg text-dark-textMain group-hover:text-white transition-colors leading-snug line-clamp-2">
           {course.title}
         </h3>
         {course.instructor && (
@@ -119,7 +119,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onEdit, onDelete
         {/* Chapter & Certificate Badges */}
         <div className="flex flex-wrap items-center gap-2 mt-3">
           {course.totalChapters > 0 && (
-            <span className="text-xs font-mono px-2 py-0.5 rounded bg-dark-surface text-dark-textMuted border border-dark-border">
+            <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-dark-surface text-dark-textMuted border border-dark-border">
               Cap. {course.currentChapter}/{course.totalChapters}
             </span>
           )}
@@ -130,7 +130,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onEdit, onDelete
               target="_blank"
               rel="noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-1 text-xs font-mono px-2.5 py-1 rounded bg-amber-400/10 text-amber-400 border border-amber-400/30 hover:bg-amber-400/20 transition-colors font-medium btn-action-icon"
+              className="flex items-center gap-1 text-xs font-mono px-2.5 py-1 rounded-md bg-amber-400/10 text-amber-400 border border-amber-400/30 hover:bg-amber-400/20 transition-colors font-medium btn-action-icon"
               title="Ver o descargar certificado de finalización"
             >
               <Award className="w-3.5 h-3.5" />
@@ -152,10 +152,10 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course, onEdit, onDelete
           </span>
           <span className="font-semibold text-dark-textMain">{progress}%</span>
         </div>
-        <div className="w-full bg-dark-surface h-2 rounded-full overflow-hidden border border-dark-border/50">
+        <div className="w-full bg-dark-surface h-2 rounded-full overflow-hidden border border-dark-border/60">
           <div
             className={`h-full rounded-full transition-all duration-300 ${
-              course.status === 'Completed' ? 'bg-emerald-400' : 'bg-cyan-500'
+              course.status === 'Completed' ? 'bg-emerald-500' : 'bg-sky-400'
             }`}
             style={{ width: `${progress}%` }}
           ></div>

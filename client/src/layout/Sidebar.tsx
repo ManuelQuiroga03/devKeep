@@ -31,8 +31,8 @@ export const Sidebar: React.FC = () => {
       <div>
         {/* Brand Header */}
         <div className="flex items-center gap-3 px-6 h-16 border-b border-dark-border">
-          <div className="p-2 rounded-lg bg-cyanAccent/10 border border-cyanAccent/30 text-cyanAccent">
-            <Layers className="w-5 h-5" />
+          <div className="p-2 rounded-lg bg-zinc-800 text-zinc-100 border border-zinc-700">
+            <Layers className="w-5 h-5 text-zinc-200" />
           </div>
           <div>
             <h1 className="font-bold text-lg text-dark-textMain tracking-wide">DevKeep</h1>
@@ -51,17 +51,17 @@ export const Sidebar: React.FC = () => {
                 className={({ isActive }) =>
                   `group relative flex items-center gap-3 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ease-in-out ${
                     isActive
-                      ? 'bg-gradient-to-r from-cyanAccent/15 via-cyanAccent/10 to-transparent text-cyanAccent border border-cyanAccent/30 shadow-lg shadow-cyanAccent/5 font-semibold translate-x-1'
-                      : 'text-dark-textMuted hover:text-dark-textMain hover:bg-dark-surface/80 hover:translate-x-1.5 hover:border-l-2 hover:border-cyanAccent/50'
+                      ? 'bg-zinc-800/80 text-zinc-100 border border-zinc-700/80 font-semibold shadow-sm translate-x-1'
+                      : 'text-dark-textMuted hover:text-dark-textMain hover:bg-dark-surface/80 hover:translate-x-1'
                   }`
                 }
               >
                 {({ isActive }) => (
                   <>
-                    <Icon className="w-4 h-4 transition-transform duration-200 group-hover:scale-110 group-hover:text-cyanAccent" />
+                    <Icon className={`w-4 h-4 transition-transform duration-200 group-hover:scale-110 ${isActive ? 'text-zinc-100' : 'text-dark-textMuted group-hover:text-dark-textMain'}`} />
                     <span className="tracking-wide">{item.name}</span>
                     {isActive && (
-                      <span className="absolute right-2 w-1.5 h-5 rounded-full bg-cyanAccent shadow-[0_0_8px_#06b6d4]"></span>
+                      <span className="absolute right-2 w-1.5 h-4 rounded-full bg-zinc-300"></span>
                     )}
                   </>
                 )}
@@ -73,7 +73,7 @@ export const Sidebar: React.FC = () => {
 
       {/* Footer Info */}
       <div className="p-4 border-t border-dark-border">
-        <div className="p-3 rounded-lg bg-dark-surface border border-dark-border text-xs text-dark-textMuted">
+        <div className="p-3 rounded-xl bg-dark-surface border border-dark-border text-xs text-dark-textMuted">
           <div className="font-semibold text-dark-textMain mb-1">DevKeep API</div>
           <div className="flex items-center gap-2 font-mono text-[11px]">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>

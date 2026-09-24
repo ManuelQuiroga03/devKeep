@@ -29,13 +29,13 @@ export const Topbar: React.FC<TopbarProps> = ({ onOpenCommandPalette }) => {
 
   return (
     <>
-      <header className="h-16 border-b border-dark-border bg-dark-card/80 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-30">
+      <header className="h-16 border-b border-dark-border bg-dark-card/90 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-30 transition-colors duration-200">
         {/* Quick Search Bar */}
         <button
           onClick={onOpenCommandPalette}
-          className="flex items-center gap-3 px-4 py-2 rounded-lg bg-dark-bg border border-dark-border hover:border-dark-borderHover text-dark-textMuted hover:text-dark-textMain text-sm w-64 md:w-96 transition-all"
+          className="flex items-center gap-3 px-4 py-2 rounded-xl bg-dark-bg border border-dark-border hover:border-dark-borderHover text-dark-textMuted hover:text-dark-textMain text-sm w-64 md:w-96 transition-all"
         >
-          <Search className="w-4 h-4 text-cyanAccent" />
+          <Search className="w-4 h-4 text-dark-textMuted" />
           <span className="flex-1 text-left line-clamp-1">Buscar cursos, notas o atajos...</span>
           <kbd className="hidden sm:inline-block px-2 py-0.5 text-[11px] font-mono text-dark-textMuted bg-dark-surface border border-dark-border rounded">
             Ctrl + K
@@ -47,8 +47,8 @@ export const Topbar: React.FC<TopbarProps> = ({ onOpenCommandPalette }) => {
           {/* Read-Only vs Admin Status Badge */}
           {isAdmin ? (
             <div className="flex items-center gap-2">
-              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyanAccent/15 text-cyanAccent border border-cyanAccent/30 text-xs font-semibold">
-                <ShieldCheck className="w-4 h-4" />
+              <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-semibold">
+                <ShieldCheck className="w-4 h-4 text-emerald-400" />
                 <span>Modo Propietario</span>
               </span>
               <button
@@ -67,7 +67,7 @@ export const Topbar: React.FC<TopbarProps> = ({ onOpenCommandPalette }) => {
               </span>
               <button
                 onClick={() => setIsLoginModalOpen(true)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-dark-surface border border-dark-border text-dark-textMuted hover:text-cyanAccent hover:border-cyanAccent/40 text-xs font-medium transition-all"
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-dark-surface border border-dark-border text-dark-textMuted hover:text-dark-textMain hover:border-dark-borderHover text-xs font-medium transition-all"
                 title="Ingresar PIN de administrador para editar"
               >
                 <Lock className="w-3.5 h-3.5" />
